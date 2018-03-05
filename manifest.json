@@ -1,0 +1,7 @@
+{
+  "name": "MeasureTeamPulse",
+  "short_name": "MeasureTeamPulse",
+  "description": "Aggregates data about a team&#39;s pulse",
+  "start_url": "/",
+  "display": "standalone"
+}

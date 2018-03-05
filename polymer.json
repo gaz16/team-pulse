@@ -1,0 +1,10 @@
+{
+  "sources": [
+    "line-chart.png"
+  ],
+  "lint": {
+    "rules": [
+      "polymer-2"
+    ]
+  }
+}

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>MeasureTeamPulse</title>
+    <meta name="description" content="Aggregates data about a team&#39;s pulse">
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="/src/team-app/team-app.html">
+    <link rel="stylesheet" href="slider.css">
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  </head>
+  <body>
+    <div id="header" style="position: fixed; right: 0px; left: 0px; width: 100%; height: 100px; top: 0px; vertical-align: middle; line-height: 100px; font-size: 32px; color: #fff; background-color: #3D2077;">
+      <span style="padding-left:32px;">Incident Report</span>
+      <input id="showChart" type="image" style="float:right; padding:10px;" src="line-chart.png"/>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div id="chart_div" style="display:none;"></div>
+
+    <div style="height: 16px;"></div>
+
+    <div id="chart_legend" style="text-align:center; display:none;">
+      <span class="bluedot"></span><span style="padding:5px;">Race</span>
+      <span class="greendot"></span><span style="padding:5px;">Sex</span>
+      <span class="reddot"></span><span style="padding:5px;">Age</span>
+      <span class="purpledot"></span><span style="padding:5px;">Other</span>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">What type of issue are you reporting?</div>
+      <input type="radio" name="type" value="race">Race-Based</input><br>
+      <input type="radio" name="type" value="sex">Sex-Based</input><br>
+      <input type="radio" name="type" value="age">Age-Based</input><br>
+      <input type="radio" name="type" value="other">Other</input>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">How would you describe it? Check all that apply.</div>
+      <input type="checkbox" name="description" value="mild">Mild</input><br>
+      <input type="checkbox" name="description" value="uncomfortable">Uncomfortable</input><br>
+      <input type="checkbox" name="description" value="unacceptable">Unacceptable</input><br>
+      <input type="checkbox" name="description" value="deserves attention">Deserves Attention</input><br>
+      <input type="checkbox" name="description" value="needs action">Needs Action</input><br>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">Who was involved? Check all that apply.</div>
+      <input type="checkbox" name="who" value="group">Group</input><br>
+      <input type="checkbox" name="who" value="individual">Individual</input><br>
+      <input type="checkbox" name="who" value="staff">Staff</input><br>
+      <input type="checkbox" name="who" value="peers">Peers</input><br>
+      <input type="checkbox" name="who" value="managers">Managers</input><br>
+      <input type="checkbox" name="who" value="leaders">Leaders</input>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">How would you rate negativity of the words?</div>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="9" value="5" class="slider" id="wordsNeg">
+      </div>
+      <br>
+      <div style="float: left;">Low:1</div>
+      <div style="float: right;">High: 9</div>
+      <div id="wordsVal" style="text-align: center;">Value: </div>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">How would you rate negativity of the actions?</div>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="9" value="5" class="slider" id="actionsNeg">
+      </div>
+      <br>
+      <div style="float: left;">Low:1</div>
+      <div style="float: right;">High: 9</div>
+      <div id="actionsVal" style="text-align: center;">Value: </div>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">Do you want to anonymously add a description?</div>
+      <input id="yes" type="radio" name="details" value="yes">Yes</input><br>
+      <input id="no" type="radio" name="details" value="no">No</input><br>
+      <textarea id="textbox" style="display:none; width:100%" name="details_text" cols="50" rows="10"></textarea>
+    </div>
+
+    <div style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); padding: 16px; margin: 32px; border-radius: 5px; background-color: #fff; color: #757575;">
+      <div style="font-size: 22px; margin: 16px 0; color: #212121;">Report Incident</div>
+      <div id="warning">Please anwser every question before submitting!</div>
+      <button id="submit" type="button">Submit</button>
+    </div>
+  </body>
+  <script src="slider.js"></script>
+  <script type="text/javascript" src="scatterplot.js"></script>
+</html>
